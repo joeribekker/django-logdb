@@ -1,0 +1,4 @@
+/build
+/dist
+/django_logdb.egg-info
+*.pyc

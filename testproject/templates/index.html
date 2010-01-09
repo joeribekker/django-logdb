@@ -1,0 +1,14 @@
+<html>
+	<head>
+		<title>Create a log entry</title>
+	</head>
+	<body>
+		<h1>Create a log entry</h1>
+		<form action="" method="post">
+			{{ form.as_table }}
+			<input type="submit" />
+		</form>
+		<p>{{ msg }}</p>
+		<p><i>{% now "r" %}</i></p>
+	</body>
+</html>
