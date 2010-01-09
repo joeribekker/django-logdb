@@ -9,7 +9,7 @@ setup(
     author='Joeri Bekker',
     author_email='joeri@maykinmedia.nl',
     license="BSD",
-    #url='http://github.com/dcramer/django-db-log',
+    url='http://github.com/joeribekker/django-logdb',
     install_requires=[
         'Django>=1.1',
         'django-picklefield>=0.1',
