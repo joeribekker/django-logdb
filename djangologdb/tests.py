@@ -137,10 +137,10 @@ class LogTest(TestCase):
 
         rule_log_entry = LogEntry.objects.get(level=logging.CRITICAL)
 
-        # Check if the the rule created log entry is the same as the (first)
-        # normal log entry.
+        # Check if the the rule created log entry is the same as the normal log
+        # entry.
         # Note: created, path and name are different.
-        self.assertEqual(normal_log_entry.get_message(), rule_log_entry.get_message())
+        self.assertEqual(normal_log_entry.msg, rule_log_entry.msg)
         self.assertEqual(normal_log_entry.extra, rule_log_entry.extra)
         self.assertEqual(normal_log_entry.line_number, rule_log_entry.line_number)
         self.assertEqual(normal_log_entry.thread, rule_log_entry.thread)

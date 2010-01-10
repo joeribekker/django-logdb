@@ -73,7 +73,7 @@ class Command(NoArgsCommand):
             for log_entry in recent_log_aggregates.values():
                 actions = self._get_matching_rule_actions(log_aggregate)
                 if actions is not None:
-                    additional_record = logger.makeRecord('django-logdb: %s' % log_entry.name, actions['level'], log_entry.filename, log_entry.line_number, log_entry.msg, log_entry.args, log_entry.exc_info, log_entry.function_name, extra=log_entry.extra)
+                    additional_record = logger.makeRecord('django-logdb: %s' % log_entry.name, actions['level'], log_entry.filename, log_entry.line_number, log_entry.msg, log_entry.args, None, log_entry.function_name, extra=log_entry.extra)
                     logger.handle(additional_record)
 
         # Delete old log entries.
