@@ -10,37 +10,37 @@
 	<script type="text/javascript">
 	$(function () {
 		var options = {
-				series: {
-					lines: { show: true },
-					points: { show: true },
-					shadowSize: 0
-				},
-				yaxis: { min: 0, tickDecimals: 0 },
-				xaxis: { tickDecimals: 0, mode: "time" }
-			};
+			series: {
+				lines: { show: true },
+				points: { show: true },
+				shadowSize: 0
+			},
+			yaxis: { min: 0, tickDecimals: 0 },
+			xaxis: { tickDecimals: 0, mode: "time" }
+		};
 
-			var today = new Date();
-			var start_date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 30);
-			var end_date = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-			
-			var params = {
-				start_date: start_date.getTime(),
-				end_date: end_date.getTime(),
-				interval_days: 1,
-				aggregate: '{{ aggregate }}',
-				id: {{ original.pk }}
-			};
+		var today = new Date();
+		var start_date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 30);
+		var end_date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+		
+		var params = {
+			start_date: start_date.getTime(),
+			end_date: end_date.getTime(),
+			interval_days: 1,
+			aggregate: '{{ aggregate }}',
+			id: {{ original.pk }}
+		};
 
-			$.getJSON('../../datasets/', params, function(datasets) {
-				var data = [];
+		$.getJSON('../../datasets/', params, function(datasets) {
+			var data = [];
 
-				$.each(datasets, function(key, val) {
-					data.push(datasets[key]);
-				});
-				
-				$.plot($("#chart"), data, options);
+			$.each(datasets, function(key, val) {
+				data.push(datasets[key]);
 			});
+			
+			$.plot($("#chart"), data, options);
 		});
+	});
 	</script>
 {% endblock %}
 
