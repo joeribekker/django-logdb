@@ -8,14 +8,15 @@ setup(
     description='Django-logdb enables you to log entries to a database and aggregate them periodically.',
     author='Joeri Bekker',
     author_email='joeri@maykinmedia.nl',
-    license="BSD",
+    license='BSD',
+    platforms = ['any'],
     url='http://github.com/joeribekker/django-logdb',
     install_requires=[
         'Django>=1.1',
         'django-picklefield>=0.1',
     ],
+    include_package_data = True,
     packages=find_packages(),
-    include_package_data=True,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Framework :: Django',
