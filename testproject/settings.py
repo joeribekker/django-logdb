@@ -87,15 +87,9 @@ INSTALLED_APPS = (
     'djangologdb',
 )
 
-#DJANGO_LOGDB_RULES = []
-
 import logging
 from djangologdb.handlers import DjangoDatabaseHandler, add_handler
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger()
 add_handler(logger, DjangoDatabaseHandler())
-
-socketHandler = logging.handlers.SocketHandler('localhost',
-                    logging.handlers.DEFAULT_TCP_LOGGING_PORT)
-add_handler(logger, socketHandler)

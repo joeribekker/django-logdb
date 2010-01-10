@@ -18,7 +18,7 @@ to provide more insight in what is going on. The log messages are grouped by
 log level or "type of log entry".
 
 To minimize database access, aggregation is done via a Django command that you
-can call periodically or add as cronjob.
+can call periodically (as a cronjob).
 
 -------
 Install
@@ -131,7 +131,7 @@ LOGDB_LEVEL_COLORS
 
     Default::
     
-        LEVEL_COLORS =
+        LOGDB_LEVEL_COLORS =
             {
                 logging.DEBUG: '#c2c7d1',
                 logging.INFO: '#aad2e9',
@@ -154,7 +154,7 @@ LOGDB_MEDIA_URL
     
     Default::    
     
-        MEDIA_URL = '/admin/djangologdb/media/'
+        LOGDB_MEDIA_URL = '/admin/djangologdb/media/'
 
 --------
 Commands
@@ -163,10 +163,10 @@ Commands
 aggregate_logs
     Aggregates log entries and triggers any action with matching rules. 
     
-    Usage::
-        python django-admin.py aggregate-logs
+    *Usage*:
+        ``python django-admin.py aggregate-logs``
         
-    Options::
+    *Options*:
         -s, --skip-actions    Do not use the rules to create new logs.
         --cleanup=CLEANUP     Specifies the number of days to keep log entries
                               and deletes the rest.
