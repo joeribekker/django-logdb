@@ -104,7 +104,7 @@ namespace and add it to any logger you want::
 Configuration
 -------------
 
-You can set the following settings in your Django `settings.py`::
+You can set the following settings in your Django `settings.py` file::
 
 LOGDB_RULES
 -----------
@@ -166,9 +166,9 @@ FAQ
 
 Q. The graph doesn't show in the Django admin.
 A. If you don't have ``settings.DEBUG=True``, the media will not be served by 
-   Django. You should copy the media directory to your own media directory and 
-   set LOGDB_MEDIA_ROOT accordingly. You can also use Apache's Alias directive
-   to serve the static files.
+Django. You should copy the media directory to your own media directory and set
+LOGDB_MEDIA_ROOT accordingly. You can also use Apache's Alias directive to serve
+the static files.
 
 ------
 Thanks
