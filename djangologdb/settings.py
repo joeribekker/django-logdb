@@ -1,11 +1,13 @@
 # Global settings for django-logdb.
-
 import logging
 import datetime
+import os
 
 from django.conf import settings
 
-RULES = getattr(settings, 'DJANGO_LOGDB_RULES',
+import djangologdb
+
+RULES = getattr(settings, 'LOGDB_RULES',
     [{
         # If 3 logs with level WARNING or higher occur in 5 minutes or less, 
         # create a new log with level CRITICAL.
@@ -22,7 +24,7 @@ RULES = getattr(settings, 'DJANGO_LOGDB_RULES',
 )
 
 # Set colors to use in the graph for level based datasets.
-LEVEL_COLORS = getattr(settings, 'DJANGO_LOGDB_LEVEL_COLORS',
+LEVEL_COLORS = getattr(settings, 'LOGDB_LEVEL_COLORS',
     {
         logging.DEBUG: '#c2c7d1',
         logging.INFO: '#aad2e9',
@@ -32,9 +34,5 @@ LEVEL_COLORS = getattr(settings, 'DJANGO_LOGDB_LEVEL_COLORS',
     }
 )
 
-# Indicate what HTTP responses with a certain status to log and with what level. 
-HTTP_STATUS_LOGGING = getattr(settings, 'LOGDB_HTTP_STATUS_LOGGING',
-    {
-        'Http500': logging.ERROR,
-    }
-)
+MEDIA_ROOT = getattr(settings, 'LOGDB_MEDIA_ROOT', os.path.join(djangologdb.__path__[0], 'media'))
+MEDIA_URL = getattr(settings, 'LOGDB_MEDIA_URL', '/admin/djangologdb/media/')

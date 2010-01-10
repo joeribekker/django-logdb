@@ -1,11 +1,9 @@
 import logging
-import warnings
 import datetime
 
 from django.db import models
 from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
-from django.utils.encoding import smart_unicode
 from django.db.models.query import QuerySet
 from picklefield.fields import PickledObjectField
 
@@ -160,29 +158,24 @@ class LogManager(models.Manager):
         Creates an error log for a `logging` module `record` instance. This is
         done with as little overhead as possible.
         """
-        try:
-            log_entry = LogEntry.objects.create(
-                args=record.args,
-                exc_info=record.exc_info,
-                exc_text=record.exc_text,
-                filename=record.filename,
-                function_name=record.funcName,
-                level=record.levelno,
-                line_number=record.lineno,
-                module=record.module,
-                msg=record.msg,
-                name=record.name,
-                path=record.pathname,
-                process=record.process,
-                process_name=record.processName if hasattr(record, 'processName') else None,
-                thread=record.thread,
-                thread_name=record.threadName,
-                extra=self._get_extra(record),
-            )
-        except Exception, e:
-            warnings.warn(smart_unicode(e))
-        else:
-            return log_entry
+        log_entry = LogEntry.objects.create(
+            args=record.args,
+            exc_text=record.exc_text,
+            filename=record.filename,
+            function_name=record.funcName,
+            level=record.levelno,
+            line_number=record.lineno,
+            module=record.module,
+            msg=record.msg,
+            name=record.name,
+            path=record.pathname,
+            process=record.process,
+            process_name=record.processName if hasattr(record, 'processName') else None,
+            thread=record.thread,
+            thread_name=record.threadName,
+            extra=self._get_extra(record),
+        )
+        return log_entry
 
 class BaseLogEntry(models.Model):
     """
@@ -219,7 +212,6 @@ class LogEntry(BaseLogEntry):
     """
     args = PickledObjectField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
-    exc_info = PickledObjectField(blank=True, null=True)
     exc_text = models.TextField(blank=True, null=True)
     process = models.PositiveIntegerField(default=0)
     process_name = models.CharField(max_length=200, blank=True, null=True)

@@ -46,7 +46,13 @@ class DjangoDatabaseHandler(logging.Handler):
     """
     def emit(self, record):
         from models import LogEntry
-        LogEntry.objects.create_from_record(record)
+
+        try:
+            LogEntry.objects.create_from_record(record)
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except:
+            self.handleError(record)
 
 # Add the DjangoDatabaseHandler to the logging.handlers namespace.
 logging.handlers.DjangoDatabaseHandler = DjangoDatabaseHandler
