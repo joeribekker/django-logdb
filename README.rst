@@ -104,71 +104,82 @@ namespace and add it to any logger you want::
 Configuration
 -------------
 
-You can set the following settings in your Django `settings.py` file::
+You can set the following settings in your Django `settings.py` file:
 
 LOGDB_RULES
------------
-Define rules to create a new log entry when certain conditions are true.
-
-Default::
-
-    LOGDB_RULES = 
-        [{
-            # If 3 logs with level WARNING or higher occur in 5 minutes or less, 
-            # create a new log with level CRITICAL.
-            'conditions': {
-                'min_level': logging.WARNING,
-                'qualname': '',
-                'min_times_seen': 3,
-                'within_time': datetime.timedelta(0, 5 * 60),
-            },
-            'actions': {
-                'level': logging.CRITICAL,
-            }
-        }]
+    Define rules to create a new log entry when certain conditions are true.
+    
+    Default::
+    
+        LOGDB_RULES = 
+            [{
+                # If 3 logs with level WARNING or higher occur in 5 minutes or
+                # less, create a new log with level CRITICAL.
+                'conditions': {
+                    'min_level': logging.WARNING,
+                    'qualname': '',
+                    'min_times_seen': 3,
+                    'within_time': datetime.timedelta(0, 5 * 60),
+                },
+                'actions': {
+                    'level': logging.CRITICAL,
+                }
+            }]
 
 LOGDB_LEVEL_COLORS
-------------------
-Set colors to use in the graph for level based datasets.
+    Set colors to use in the graph for level based datasets.
 
-Default::
-
-    LEVEL_COLORS =
-        {
-            logging.DEBUG: '#c2c7d1',
-            logging.INFO: '#aad2e9',
-            logging.WARNING: '#b9a6d7',
-            logging.ERROR: '#deb7c1',
-            logging.CRITICAL: '#e9a8ab',
-        }
+    Default::
+    
+        LEVEL_COLORS =
+            {
+                logging.DEBUG: '#c2c7d1',
+                logging.INFO: '#aad2e9',
+                logging.WARNING: '#b9a6d7',
+                logging.ERROR: '#deb7c1',
+                logging.CRITICAL: '#e9a8ab',
+            }
 
 LOGDB_MEDIA_ROOT
-----------------
-Set the absolute path to the directory of `django-logdb` media.
-
-Default::
+    Set the absolute path to the directory of `django-logdb` media.
     
-    LOGDB_MEDIA_URL = os.path.join(djangologdb.__path__[0], 'media')
+    Default::
+        
+        LOGDB_MEDIA_URL = os.path.join(djangologdb.__path__[0], 'media')
     
 LOGDB_MEDIA_URL
----------------
-Set the URL that handles the media served from LOGDB_MEDIA_ROOT. Make sure to 
-add a trailing slash at the end. If ``settings.DEBUG=True``, the media will be
-served by Django.
+    Set the URL that handles the media served from LOGDB_MEDIA_ROOT. Make sure
+    to add a trailing slash at the end. If ``settings.DEBUG=True``, the media
+    will be served by Django.
+    
+    Default::    
+    
+        MEDIA_URL = '/admin/djangologdb/media/'
 
-Default::    
+--------
+Commands
+--------
 
-    MEDIA_URL = '/admin/djangologdb/media/'
+aggregate_logs
+    Aggregates log entries and triggers any action with matching rules. 
+    
+    Usage::
+        python django-admin.py aggregate-logs
+        
+    Options::
+        -s, --skip-actions    Do not use the rules to create new logs.
+        --cleanup=CLEANUP     Specifies the number of days to keep log entries
+                              and deletes the rest.
 
 ---
 FAQ
 ---
 
-Q. The graph doesn't show in the Django admin.
-A. If you don't have ``settings.DEBUG=True``, the media will not be served by 
-Django. You should copy the media directory to your own media directory and set
-LOGDB_MEDIA_ROOT accordingly. You can also use Apache's Alias directive to serve
-the static files.
+The graph doesn't show in the Django admin.
+    If you don't have ``settings.DEBUG=True``, the media will not be served by 
+    Django. You should copy the media directory to your own media directory and
+    set LOGDB_MEDIA_ROOT accordingly. You can also use Apache's Alias directive
+    to serve the static files.
 
 ------
 Thanks
