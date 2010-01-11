@@ -1,11 +1,9 @@
-============
 DJANGO-LOGDB
 ============
 
 Django-logdb enables you to log entries to a database, aggregate and act on 
 them with certain rules, and gives you more insight in what's going on.
 
------------
 Description
 -----------
 
@@ -20,7 +18,6 @@ log level or "type of log entry".
 To minimize database access, aggregation is done via a Django command that you
 can call periodically (as a cronjob).
 
--------
 Install
 -------
 
@@ -61,7 +58,8 @@ Optionally, if you want to log exceptions, add the middleware::
 
 Run ``python manage.py syncdb`` to create the database tables.
 
-
+Setup logging
+-------------
 
 Now, for the actual logging part, you should use the database logging handler.
 There are two ways to do this: Using only Python code, or, by using a 
@@ -100,7 +98,6 @@ namespace and add it to any logger you want::
     class=handlers.DjangoDatabaseHandler
     args=()
 
--------------
 Configuration
 -------------
 
@@ -145,7 +142,7 @@ LOGDB_MEDIA_ROOT
     
     Default::
         
-        LOGDB_MEDIA_URL = os.path.join(djangologdb.__path__[0], 'media')
+        LOGDB_MEDIA_ROOT = os.path.join(djangologdb.__path__[0], 'media')
     
 LOGDB_MEDIA_URL
     Set the URL that handles the media served from LOGDB_MEDIA_ROOT. Make sure
@@ -156,7 +153,6 @@ LOGDB_MEDIA_URL
     
         LOGDB_MEDIA_URL = '/admin/djangologdb/media/'
 
---------
 Commands
 --------
 
@@ -171,7 +167,6 @@ aggregate_logs
         --cleanup=CLEANUP     Specifies the number of days to keep log entries
                               and deletes the rest.
 
----
 FAQ
 ---
 
@@ -181,7 +176,19 @@ The graph doesn't show in the Django admin.
     set LOGDB_MEDIA_ROOT accordingly. You can also use Apache's Alias directive
     to serve the static files.
 
-------
+The Django admin pages for django-logdb load very slow.
+    If you have a lot of datapoints in the graph, it executes a lot of queries.
+    This can take some time. You should decrease the time period or the increase
+    the interval. By default, the last 30 days with an interval of 1 day is 
+    used, resulting in 30 datapoints.
+    
+Why is there 1 query executed for each datapoint?
+    Django does not (yet) allow to group by certain date information. Even 
+    though a timestamp is stored in the database, there is no way to tell the 
+    Django ORM to group by day, by hour, etc. The solution I used was to 
+    filter/limit the results needed to construct 1 datapoint.
+
+
 Thanks
 ------
 
