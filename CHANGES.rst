@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+0.9.5
+-----
+- Removed Django as a requirement (although it's still required) to prevent
+  conflicts with djangorecipe.
+
 0.9.4
 -----
 - Fixed manifest to include changes.

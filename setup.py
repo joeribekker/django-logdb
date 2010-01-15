@@ -23,7 +23,6 @@ setup(
     platforms=['any'],
     url='http://github.com/joeribekker/django-logdb',
     install_requires=[
-        'Django>=1.1',
         'django-picklefield>=0.1',
     ],
     include_package_data=True,
