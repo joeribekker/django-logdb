@@ -78,8 +78,9 @@ the following to your Django `settings.py`::
     # this handler instead of logging.addHandler works around that.
     add_handler(logger, DjangoDatabaseHandler())
         
-To use this handler via a logging configuration file, simply import this module
-in your Django `settings.py` before loading the configuration from a file::
+To use this handler via a logging configuration file, simply import the 
+`handlers` module from `djangologdb` in your Django `settings.py` before loading
+the configuration from a file::
 
     from djangologdb import handlers
     logging.config.fileConfig(...)

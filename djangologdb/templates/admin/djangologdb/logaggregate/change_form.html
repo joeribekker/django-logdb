@@ -3,7 +3,7 @@
 
 {% block extrastyle %}
 	{{ block.super }}
-
+	
 	<!--[if IE]><script type="text/javascript" src="{% djangologdb_media_url %}js/excanvas.min.js"></script><![endif]-->
 	<script type="text/javascript" src="{% djangologdb_media_url %}js/jquery-1.3.2.min.js"></script>
 	<script type="text/javascript" src="{% djangologdb_media_url %}js/jquery.flot-0.6.min.js"></script>
@@ -54,11 +54,11 @@
 	{% endblock %}
 	
 	<div class="module">
-		<h2>{% trans "Properties" %}</h2>
+		<h2>{% trans "Summary" %}</h2>
 		<div class="form-row">
 			<label>This <strong>{{ original.get_level_display }}</strong> message was seen <strong>{{ original.times_seen }}</strong> time{{ original.times_seen|pluralize }}, in <strong>{{ original.filename }}</strong>, line <strong>{{ original.line_number }}</strong>:</label>
 			<p class="help">{{ original.path }}, {{ original.module }}.{{ original.function_name }}</p>
-			<textarea class="vLargeTextField" name="msg" cols="40" rows="10" id="id_msg">{{ original.msg }}</textarea>
+			<p>{{ original.msg }}</p>
 		</div>
 	</div>
 
@@ -72,19 +72,17 @@
 					<th>{% trans "Process" %}</th>
 					<th>{% trans "Thread" %}</th>
 					<th>{% trans "Extra" %}</th>
-					<th>{% trans "Exception information" %}</th>
 					<th>{% trans "Exception trace" %}</th>
 				</tr>
 			</thead>
 			<tbody>
 			{% for log_entry in original.logentry_set.all %}
 				<tr class="{% cycle "row1" "row2" %}">
-					<td>{{ log_entry.created }}</td>
+					<td><a href="../../logentry/{{ log_entry.pk }}/">{{ log_entry.created }}</a></td>
 					<td>{{ log_entry.args }}</td>
 					<td>{{ log_entry.process }} ({{ log_entry.process_name }})</td>
 					<td>{{ log_entry.thread }} ({{ log_entry.thread_name }})</td>
 					<td>{{ log_entry.extra }}</td>
-					<td>{{ log_entry.exc_info }}</td>
 					<td>{{ log_entry.exc_text }}</td>
 				</tr>
 			{% endfor %}
