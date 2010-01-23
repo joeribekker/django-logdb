@@ -146,20 +146,24 @@ class LogManager(models.Manager):
     def _get_extra(self, record):
         """
         Get the extra fields by filtering out the known reserved fields.
+        
+        Note: Values are stringified to prevent deep pickling.
         """
         extra = {}
         for k, v in record.__dict__.items():
             if k not in LOG_RECORD_RESERVED_ATTRS:
-                extra[k] = v
+                extra[k] = str(v) # Stringify
         return extra
 
     def create_from_record(self, record):
         """
         Creates an error log for a `logging` module `record` instance. This is
         done with as little overhead as possible.
+
+        Note: Values are stringified to prevent deep pickling.
         """
         log_entry = LogEntry.objects.create(
-            args=record.args,
+            args=tuple(map(str, record.args)), # Stringify
             exc_text=record.exc_text,
             filename=record.filename,
             function_name=record.funcName,

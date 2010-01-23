@@ -161,7 +161,7 @@ aggregate_logs
     Aggregates log entries and triggers any action with matching rules. 
     
     *Usage*:
-        ``python django-admin.py aggregate-logs``
+        ``python django-admin.py aggregate_logs``
         
     *Options*:
         -s, --skip-actions    Do not use the rules to create new logs.
@@ -174,14 +174,29 @@ FAQ
 The graph doesn't show in the Django admin.
     If you don't have ``settings.DEBUG=True``, the media will not be served by 
     Django. You should copy the media directory to your own media directory and
-    set LOGDB_MEDIA_ROOT accordingly. You can also use Apache's Alias directive
-    to serve the static files.
+    set LOGDB_MEDIA_ROOT and LOGDB_MEDIA_URL accordingly.
+    
+    Example::
+    	
+    	LOGDB_MEDIA_ROOT = '/myproject/media/djanglogdb/'
+    	LOGDB_MEDIA_URL = '/media/djanglogdb/'
+    
+    Instead of copying, you can also use Apache's Alias directive to serve the 
+    static files, as you probably also did for Django's own media files. It is
+    explained here: http://docs.djangoproject.com/en/dev/howto/deployment/modwsgi/#serving-media-files
+    This boils down to adding the following line to your VirtualHost entry::
+    
+    	Alias <your LOGDB_MEDIA_URL setting> <path to django-logdb media dir>
+    
+    Example::
+
+		Alias /admin/djangologdb/media/ /myproject/eggs/django_logdb-0.9.5-py2.6.egg/djangologdb/media/
 
 The Django admin pages for django-logdb load very slow.
     If you have a lot of datapoints in the graph, it executes a lot of queries.
-    This can take some time. You should decrease the time period or the increase
-    the interval. By default, the last 30 days with an interval of 1 day is 
-    used, resulting in 30 datapoints.
+    This can take some time. You should decrease the time period or increase the
+    interval. By default, the last 30 days with an interval of 1 day is used, 
+    resulting in 30 datapoints.
     
 Why is there 1 query executed for each datapoint?
     Django does not (yet) allow to group by certain date information. Even 

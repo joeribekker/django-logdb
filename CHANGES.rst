@@ -1,6 +1,13 @@
 CHANGES
 =======
 
+pre-0.9.6
+---------
+
+- Updated README to include examples to serve the media.
+- Fixed a bug where objects/instances were pickled too deep. Log record 
+  arguments and the extra parameters are now stringified to prevent this.
+
 0.9.5
 -----
 - Removed Django as a requirement (although it's still required) to prevent
