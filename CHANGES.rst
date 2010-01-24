@@ -1,12 +1,14 @@
 CHANGES
 =======
 
-pre-0.9.6
----------
+0.9.6
+-----
 
 - Updated README to include examples to serve the media.
-- Fixed a bug where objects/instances were pickled too deep. Log record 
-  arguments and the extra parameters are now stringified to prevent this.
+- Fixed a problem with saving objects or instances as log record arguments
+  (picklefield).
+- Fixed a problem with unicode characters in the arguments.
+- Replaced library picklefield with JSONField and TupleField.
 
 0.9.5
 -----

@@ -22,9 +22,9 @@ setup(
     license='BSD',
     platforms=['any'],
     url='http://github.com/joeribekker/django-logdb',
-    install_requires=[
-        'django-picklefield>=0.1',
-    ],
+    #install_requires=[
+    #    'Django>=1.1',
+    #],
     include_package_data=True,
     packages=find_packages(),
     classifiers=[

@@ -5,10 +5,9 @@ from django.db import models
 from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.query import QuerySet
-from picklefield.fields import PickledObjectField
 
 from djangologdb import settings as djangologdb_settings
-from djangologdb.utils import get_timestamp
+from djangologdb.utils import get_timestamp, JSONField, TupleField
 
 LOG_LEVELS = (
     (logging.INFO, 'Info'),
@@ -19,9 +18,9 @@ LOG_LEVELS = (
 )
 
 LOG_RECORD_RESERVED_ATTRS = (
-    'args', # Tuple or basestring.
+    'args', # Always a tuple.
     'created',
-    'exc_info', # Tuple or something that evaluates to False.
+    'exc_info', # "Something" that evaluates to True or False.
     'exc_text',
     'filename',
     'funcName',
@@ -152,7 +151,7 @@ class LogManager(models.Manager):
         extra = {}
         for k, v in record.__dict__.items():
             if k not in LOG_RECORD_RESERVED_ATTRS:
-                extra[k] = str(v) # Stringify
+                extra[k] = unicode(v) # Stringify
         return extra
 
     def create_from_record(self, record):
@@ -163,7 +162,7 @@ class LogManager(models.Manager):
         Note: Values are stringified to prevent deep pickling.
         """
         log_entry = LogEntry.objects.create(
-            args=tuple(map(str, record.args)), # Stringify
+            args=tuple(map(unicode, record.args)), # Stringify
             exc_text=record.exc_text,
             filename=record.filename,
             function_name=record.funcName,
@@ -214,14 +213,16 @@ class LogEntry(BaseLogEntry):
     Represents a single log entry from the `logger` module. Most of the `logger`
     fields are represented in this model, except for some time related fields.
     """
-    args = PickledObjectField(blank=True, null=True)
+    #args = PickledObjectField(blank=True, null=True)
+    args = TupleField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     exc_text = models.TextField(blank=True, null=True)
     process = models.PositiveIntegerField(default=0)
     process_name = models.CharField(max_length=200, blank=True, null=True)
     thread = models.PositiveIntegerField(default=0)
     thread_name = models.CharField(max_length=200, blank=True, null=True)
-    extra = PickledObjectField(blank=True)
+    #extra = PickledObjectField(blank=True)
+    extra = JSONField(blank=True)
 
     log_aggregate = models.ForeignKey(LogAggregate, blank=True, null=True)
 

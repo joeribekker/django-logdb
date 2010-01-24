@@ -1,6 +1,10 @@
 import datetime
 import time
 
+from django.db import models
+from django.core.serializers.json import DjangoJSONEncoder
+from django.utils import simplejson as json
+
 def get_timestamp(date_time):
     """
     Create a `timestamp` from a `datetime` object. A `timestamp` is defined
@@ -14,3 +18,40 @@ def get_datetime(timestamp):
     Takes a `timestamp` and returns a `datetime` object.
     """
     return datetime.datetime.fromtimestamp(int(timestamp / 1000))
+
+
+class JSONField(models.TextField):
+    __metaclass__ = models.SubfieldBase
+
+    def to_python(self, value):
+        if isinstance(value, basestring) and value:
+            value = json.loads(value)
+
+        return value
+
+    def get_db_prep_save(self, value):
+        if value is None:
+            return None
+
+        value = json.dumps(value, cls=DjangoJSONEncoder)
+        return super(JSONField, self).get_db_prep_save(value)
+
+
+class TupleField(models.TextField):
+    __metaclass__ = models.SubfieldBase
+
+    def to_python(self, value):
+        if value is None:
+            return None
+
+        if isinstance(value, basestring):
+            value = tuple(json.loads(value))
+
+        return value
+
+    def get_db_prep_save(self, value):
+        if value is None:
+            return None
+
+        value = json.dumps(value, cls=DjangoJSONEncoder)
+        return super(TupleField, self).get_db_prep_save(value)

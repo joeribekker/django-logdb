@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 import logging
 import datetime
 
@@ -62,6 +63,61 @@ class LogTest(TestCase):
         self.assertEqual(log_entry.get_message(), msg % args)
         self.assertEqual(log_entry.extra, extra)
         self.assertEqual(log_entry.level, logging.INFO)
+
+        # This time without arguments.
+        log_entry.delete()
+        logger.log(logging.INFO, msg, extra=extra)
+        log_entry = LogEntry.objects.get()
+
+        # Check if the log entry matches.
+        self.assertEqual(log_entry.get_message(), msg)
+        self.assertEqual(log_entry.extra, extra)
+        self.assertEqual(log_entry.level, logging.INFO)
+
+    def test_unicode(self):
+        class A:
+            def __unicode__(self):
+                return u'¿Por qué?'
+
+        class B(object):
+            def __unicode__(self):
+                return u'No sé.'
+
+        msg = u'¿Qué pasa? %s %s %s'
+        args = (u'Se me rompió el corazón!', A(), B())
+        extra = {'language': u'Español'}
+
+        self.assertEqual(LogEntry.objects.count(), 0)
+        logger.log(logging.INFO, msg, *args, extra=extra)
+        self.assertEqual(LogEntry.objects.count(), 1)
+
+        log_entry = LogEntry.objects.get()
+
+        # Check if the log entry matches.
+        self.assertEqual(log_entry.get_message(), msg % args)
+        self.assertEqual(log_entry.extra, extra)
+        self.assertEqual(log_entry.level, logging.INFO)
+
+    def test_logging_with_object_arguments(self):
+        class A:
+            def __repr__(self):
+                return 'An instance'
+
+        class B(object):
+            def __repr__(self):
+                return 'An object'
+
+        msg = '%s, %s and %s are all stringified!'
+        args = (A(), B(), ['a', 'list'])
+
+        self.assertEqual(LogEntry.objects.count(), 0)
+        logger.log(logging.INFO, msg, *args)
+        self.assertEqual(LogEntry.objects.count(), 1)
+
+        log_entry = LogEntry.objects.get()
+
+        # Check if the log entry matches.
+        self.assertEqual(log_entry.get_message(), msg % args)
 
     def _foo(self, level, name):
         """
