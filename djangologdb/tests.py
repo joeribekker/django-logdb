@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import logging
 import datetime
 
@@ -88,15 +88,17 @@ class LogTest(TestCase):
         extra = {'language': u'Español'}
 
         self.assertEqual(LogEntry.objects.count(), 0)
-        logger.log(logging.INFO, msg, *args, extra=extra)
+        # In Python 2.6, you can use:
+        # logger.log(logging.INFO, msg, *args, extra=extra)
+        logger.log(logging.INFO, msg, args[0], args[1], args[2], extra=extra)
         self.assertEqual(LogEntry.objects.count(), 1)
 
         log_entry = LogEntry.objects.get()
 
         # Check if the log entry matches.
         self.assertEqual(log_entry.get_message(), msg % args)
-        self.assertEqual(log_entry.extra, extra)
         self.assertEqual(log_entry.level, logging.INFO)
+        self.assertEqual(log_entry.extra, extra)
 
     def test_logging_with_object_arguments(self):
         class A:

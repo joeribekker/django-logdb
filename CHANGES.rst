@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+0.9.7
+-----
+- Fixed an error in tests.py that occured with Python 2.5.
+- Added 2 new settings: INTERVAL and HISTORY_DAYS with the defaults as before.
+
 0.9.6
 -----
 
