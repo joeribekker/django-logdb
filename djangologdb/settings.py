@@ -7,6 +7,10 @@ from django.conf import settings
 
 import djangologdb
 
+INTERVAL = getattr(settings, 'LOGDB_INTERVAL', datetime.timedelta(1))
+
+HISTORY_DAYS = getattr(settings, 'LOGDB_HISTORY_DAYS', 30)
+
 RULES = getattr(settings, 'LOGDB_RULES',
     [{
         # If 3 logs with level WARNING or higher occur in 5 minutes or less, 
