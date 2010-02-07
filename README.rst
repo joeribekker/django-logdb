@@ -25,7 +25,7 @@ The easiest way to install the package is via setuptools::
 
     easy_install django-logdb
 
-Once installed, update your Django `settings.py` and add `djangologdb` to your 
+Once installed, update your Django `settings.py` and add ``djangologdb`` to your 
 INSTALLED_APPS::
 
     INSTALLED_APPS = (
@@ -79,8 +79,8 @@ the following to your Django `settings.py`::
     add_handler(logger, DjangoDatabaseHandler())
         
 To use this handler via a logging configuration file, simply import the 
-`handlers` module from `djangologdb` in your Django `settings.py` before loading
-the configuration from a file::
+``handlers`` module from ``djangologdb`` in your Django `settings.py` before 
+loading the configuration from a file::
 
     from djangologdb import handlers
     logging.config.fileConfig(...)
@@ -103,6 +103,20 @@ Configuration
 -------------
 
 You can set the following settings in your Django `settings.py` file:
+
+LOGDB_HISTORY_DAYS
+	The number of days to show in the various graphs.
+	
+	Default::
+	
+		LOGDB_HISTORY_DAYS = 30
+
+LOGDB_INTERVAL
+	The ``timedelta`` between each datapoint in the various graphs.
+	
+	Default::
+
+		LOGDB_INTERVAL = datetime.timedelta(1) # 1 day
 
 LOGDB_RULES
     Define rules to create a new log entry when certain conditions are true.
@@ -146,9 +160,9 @@ LOGDB_MEDIA_ROOT
         LOGDB_MEDIA_ROOT = os.path.join(djangologdb.__path__[0], 'media')
     
 LOGDB_MEDIA_URL
-    Set the URL that handles the media served from LOGDB_MEDIA_ROOT. Make sure
-    to add a trailing slash at the end. If ``settings.DEBUG=True``, the media
-    will be served by Django.
+    Set the URL that handles the media served from ``LOGDB_MEDIA_ROOT``. Make 
+    sure to add a trailing slash at the end. If ``settings.DEBUG=True``, the 
+    media will be served by Django.
     
     Default::    
     
@@ -197,6 +211,7 @@ The Django admin pages for django-logdb load very slow.
     This can take some time. You should decrease the time period or increase the
     interval. By default, the last 30 days with an interval of 1 day is used, 
     resulting in 30 datapoints.
+    See the settings ``LOGDB_HISTORY_DAYS`` and ``LOGDB_INTERVAL``.
     
 Why is there 1 query executed for each datapoint?
     Django does not (yet) allow to group by certain date information. Even 
