@@ -87,9 +87,22 @@ INSTALLED_APPS = (
     'djangologdb',
 )
 
+# Django-logdb settings
 import logging
 from djangologdb.handlers import DjangoDatabaseHandler, add_handler
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger()
 add_handler(logger, DjangoDatabaseHandler())
+
+import datetime
+
+LOGDB_INTERVAL = datetime.timedelta(0, 60 * 60 * 12) # 12 hours
+LOGDB_HISTORY_DAYS = 7
+LOGDB_LEVEL_COLORS = {
+    logging.DEBUG: 'gray',
+    logging.INFO: '#0000ff',
+    logging.WARNING: 'yellow',
+    logging.ERROR: 'orange',
+    logging.CRITICAL: '#ff9999',
+}

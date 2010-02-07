@@ -1,0 +1,107 @@
+{% extends "admin/change_form.html" %}
+{% load i18n djangologdb_tags %}
+
+{% block extrahead %}
+	{{ block.super }}
+	
+	{% block djangologdb-jslibs %}
+	<!--[if IE]><script type="text/javascript" src="{% djangologdb_media_url %}js/excanvas.min.js"></script><![endif]-->
+	<script type="text/javascript" src="{% djangologdb_media_url %}js/jquery-1.3.2.min.js"></script>
+	<script type="text/javascript" src="{% djangologdb_media_url %}js/jquery.flot-0.6.min.js"></script>
+	{% endblock %}
+	
+	{% block djangologdb-jsinit %}
+	<script type="text/javascript">
+	$(function () {
+		var options = {
+			series: {
+				lines: { show: true },
+				points: { show: true },
+				shadowSize: 0
+			},
+			yaxis: { min: 0, tickDecimals: 0 },
+			xaxis: { tickDecimals: 0, mode: "time" }
+		};
+
+		var today = new Date();
+		var start_date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - {{ djangologdb_settings.HISTORY_DAYS }});
+		var end_date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+		
+		var params = {
+			start_date: start_date.getTime(),
+			end_date: end_date.getTime(),
+			{% ifequal djangologdb_settings.INTERVAL.days 0 %}
+			interval_seconds: {{ djangologdb_settings.INTERVAL.seconds }},{% else %}
+			interval_days: {{ djangologdb_settings.INTERVAL.days }},{% endifequal %}
+			aggregate: '{{ aggregate }}',
+			id: {{ original.pk }}
+		};
+
+		$.getJSON('../../datasets/', params, function(datasets) {
+			var data = [];
+
+			$.each(datasets, function(key, val) {
+				data.push(datasets[key]);
+			});
+			
+			$.plot($("#chart"), data, options);
+		});
+	});
+	</script>
+	{% endblock %}
+{% endblock %}
+
+{% block content %}<div id="content-main">
+	{% block object-tools %}
+		{{ block.super }}
+	
+		{% block djangologdb-chart %}
+	<div class="module" style="padding: 10px;">
+		<div id="chart" style="height: 250px;"></div>
+	</div>
+		{% endblock %}
+	{% endblock %}
+	
+	{% block djangologdb-logsummary %}
+	<div class="module">
+		<h2>{% trans "Summary" %}</h2>
+		<div class="form-row">
+			<label>This <strong>{{ original.get_level_display }}</strong> message was seen <strong>{{ original.times_seen }}</strong> time{{ original.times_seen|pluralize }}, in <strong>{{ original.filename }}</strong>, line <strong>{{ original.line_number }}</strong>:</label>
+			<p class="help">{{ original.path }}, {{ original.module }}.{{ original.function_name }}</p>
+			<p>{{ original.msg }}</p>
+		</div>
+	</div>
+	{% endblock %}
+
+	{% block djangologdb-loglist %}
+	<div class="module">
+		<h2>{% trans "Logs" %}</h2>
+		<table cellspacing="0">
+			<thead>
+				<tr>
+					<th>{% trans "Created" %}</th>
+					<th>{% trans "Arguments" %}</th>
+					<th>{% trans "Process" %}</th>
+					<th>{% trans "Thread" %}</th>
+					<th>{% trans "Extra" %}</th>
+					<th>{% trans "Exception trace" %}</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for log_entry in original.logentry_set.all %}
+				<tr class="{% cycle "row1" "row2" %}">
+					<td><a href="../../logentry/{{ log_entry.pk }}/">{{ log_entry.created }}</a></td>
+					<td>{{ log_entry.args }}</td>
+					<td>{{ log_entry.process }} ({{ log_entry.process_name }})</td>
+					<td>{{ log_entry.thread }} ({{ log_entry.thread_name }})</td>
+					<td>{{ log_entry.extra }}</td>
+					<td>{{ log_entry.exc_text }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	{% endblock %}
+
+</div>
+{% endblock %}

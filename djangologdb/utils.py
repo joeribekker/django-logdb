@@ -25,7 +25,10 @@ class JSONField(models.TextField):
 
     def to_python(self, value):
         if isinstance(value, basestring) and value:
-            value = json.loads(value)
+            try:
+                value = json.loads(value)
+            except ValueError:
+                return None
 
         return value
 
@@ -45,7 +48,10 @@ class TupleField(models.TextField):
             return None
 
         if isinstance(value, basestring):
-            value = tuple(json.loads(value))
+            try:
+                value = tuple(json.loads(value))
+            except ValueError:
+                return None
 
         return value
 

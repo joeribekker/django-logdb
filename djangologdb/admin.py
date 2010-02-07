@@ -3,6 +3,7 @@ from django.utils.translation import ugettext
 from django.utils.encoding import force_unicode
 
 from models import LogEntry, LogAggregate
+from djangologdb import settings as djangologdb_settings
 
 class LogEntryInline(admin.TabularInline):
     model = LogEntry
@@ -16,6 +17,7 @@ class LogAggregateOptions(admin.ModelAdmin):
 
     def change_view(self, request, object_id, extra_context=None):
         djangologdb_context = {
+            'djangologdb_settings': djangologdb_settings,
             'aggregate': 'checksum',
             'title': ugettext('View %s') % force_unicode(self.opts.verbose_name),
         }
@@ -23,6 +25,7 @@ class LogAggregateOptions(admin.ModelAdmin):
 
     def changelist_view(self, request, extra_context=None):
         djangologdb_context = {
+            'djangologdb_settings': djangologdb_settings,
             'aggregate': 'checksum',
             'title': ugettext('Select %s to view') % force_unicode(self.opts.verbose_name),
         }
@@ -36,12 +39,14 @@ class LogEntryOptions(admin.ModelAdmin):
 
     def change_view(self, request, object_id, extra_context=None):
         djangologdb_context = {
+            'djangologdb_settings': djangologdb_settings,
             'title': ugettext('View %s') % force_unicode(self.opts.verbose_name),
         }
         return super(LogEntryOptions, self).change_view(request, object_id, extra_context=djangologdb_context)
 
     def changelist_view(self, request, extra_context=None):
         djangologdb_context = {
+            'djangologdb_settings': djangologdb_settings,
             'aggregate': 'level',
             'title': ugettext('Select %s to view') % force_unicode(self.opts.verbose_name),
         }

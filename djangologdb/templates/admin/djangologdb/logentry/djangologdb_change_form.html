@@ -1,0 +1,58 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block content %}<div id="content-main">
+
+	{% block djangologdb-logsummary %}
+	<div class="module">
+		<h2>{% trans "Summary" %}</h2>
+		<div class="form-row">
+			<label>This <strong>{{ original.get_level_display }}</strong> message occured in <strong>{{ original.filename }}</strong>, line <strong>{{ original.line_number }}</strong>:</label>
+			<p class="help">{{ original.path }}, {{ original.module }}.{{ original.function_name }}</p>
+			<p>{{ original.get_message }}</p>
+		</div>
+	</div>
+	{% endblock %}
+
+	{% block djangologdb-logextra %}
+		{% if original.extra %}
+	<div class="module">
+		<h2>{% trans "Extra" %}</h2>
+		<table cellspacing="0">
+			<tbody>
+			{% for k, v in original.extra.items %}
+				<tr>
+					<th style="width: 8em;">{{ k }}</th>
+					<td>{{ v }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+		{% endif %}
+	{% endblock %}
+
+	{% block djangologdb-loginfo %}
+	<div class="module">
+		<h2>{% trans "Additional information" %}</h2>
+		<table cellspacing="0">
+			<tbody>
+				<tr>
+					<th style="width: 8em;">{% trans "Process" %}</th>
+					<td>{{ original.process }} ({{ original.process_name }})</td>
+				</tr>
+				<tr>
+					<th>{% trans "Thread" %}</th>
+					<td>{{ original.thread }} ({{ original.thread_name }})</td>
+				</tr>
+				<tr>
+					<th>{% trans "Exception trace" %}</th>
+					<td><pre style="color: #111; margin: 0; padding: 0; font-size: 118.2%;">{{ original.exc_text }}</pre></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	{% endblock %}
+
+</div>
+{% endblock %}
