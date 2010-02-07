@@ -3,6 +3,7 @@ CHANGES
 
 0.9.7
 -----
+- Aggregation of logs is now done in a transaction.
 - Changed templates to allow for easier customization.
 - Fixed an error in tests.py that occured with Python 2.5.
 - Added 2 new settings: INTERVAL and HISTORY_DAYS with the defaults as before.

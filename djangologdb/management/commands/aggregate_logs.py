@@ -5,6 +5,7 @@ import datetime
 from django.core.management.base import NoArgsCommand
 from django.utils.hashcompat import md5_constructor
 from django.db.models import F
+from django.db import transaction
 
 from djangologdb.models import LogEntry, LogAggregate
 from djangologdb import settings as djangologdb_settings
@@ -23,6 +24,7 @@ class Command(NoArgsCommand):
         make_option('--cleanup', dest='cleanup', default='-1', help='Specifies the number of days to keep log entries and deletes the rest.'),
     )
 
+    @transaction.commit_on_success
     def handle_noargs(self, **options):
         self.verbosity = int(options.get('verbosity', 1))
         self.skip_actions = options.get('skip_actions', False)
