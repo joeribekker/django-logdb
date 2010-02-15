@@ -219,7 +219,7 @@ class LogEntry(BaseLogEntry):
     exc_text = models.TextField(blank=True, null=True)
     process = models.PositiveIntegerField(default=0)
     process_name = models.CharField(max_length=200, blank=True, null=True)
-    thread = models.PositiveIntegerField(default=0)
+    thread = models.DecimalField(max_digits=21, decimal_places=0)
     thread_name = models.CharField(max_length=200, blank=True, null=True)
     #extra = PickledObjectField(blank=True)
     extra = JSONField(blank=True)
