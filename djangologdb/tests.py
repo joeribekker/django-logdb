@@ -83,20 +83,21 @@ class LogTest(TestCase):
             def __unicode__(self):
                 return u'No sé.'
 
-        msg = u'¿Qué pasa? %s %s %s'
-        args = (u'Se me rompió el corazón!', A(), B())
+        msg = u'¿Qué pasa? %s %s %s %s'
+        args = (u'Se me rompió el corazón!', A(), B(), chr(195))
         extra = {'language': u'Español'}
 
         self.assertEqual(LogEntry.objects.count(), 0)
         # In Python 2.6, you can use:
         # logger.log(logging.INFO, msg, *args, extra=extra)
-        logger.log(logging.INFO, msg, args[0], args[1], args[2], extra=extra)
+        logger.log(logging.INFO, msg, args[0], args[1], args[2], args[3], extra=extra)
         self.assertEqual(LogEntry.objects.count(), 1)
 
         log_entry = LogEntry.objects.get()
 
         # Check if the log entry matches.
-        self.assertEqual(log_entry.get_message(), msg % args)
+        # Last log entry goes wrong, due to unicode error.
+        self.assertEqual(log_entry.get_message(), msg % (args[0:3] + (u'\ufffd',)))
         self.assertEqual(log_entry.level, logging.INFO)
         self.assertEqual(log_entry.extra, extra)
 

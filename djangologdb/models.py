@@ -159,10 +159,29 @@ class LogManager(models.Manager):
         Creates an error log for a `logging` module `record` instance. This is
         done with as little overhead as possible.
 
-        Note: Values are stringified to prevent deep pickling.
+        NOTE: Message arguments are stringified in case odd objects are passed,
+        even though this should be up to the user.
         """
+        # Try to convert all arguments to unicode.
+        try:
+            args = map(unicode, record.args)
+        except UnicodeDecodeError:
+            args = []
+            for arg in record.args:
+                try:
+                    args.append(unicode(arg))
+                except UnicodeDecodeError:
+                    # If a specific argument goes wrong, try to replace the
+                    # invalid characters.
+                    try:
+                        args.append(unicode(arg, errors='replace'))
+                    except:
+                        args.append(u'(django-logdb: Argument encoding error)')
+                except:
+                    args.append(u'(django-logdb: Incorrect argument)')
+
         log_entry = LogEntry.objects.create(
-            args=tuple(map(unicode, record.args)), # Stringify
+            args=tuple(args),
             exc_text=record.exc_text,
             filename=record.filename,
             function_name=record.funcName,
@@ -213,7 +232,6 @@ class LogEntry(BaseLogEntry):
     Represents a single log entry from the `logger` module. Most of the `logger`
     fields are represented in this model, except for some time related fields.
     """
-    #args = PickledObjectField(blank=True, null=True)
     args = TupleField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     exc_text = models.TextField(blank=True, null=True)
@@ -221,7 +239,6 @@ class LogEntry(BaseLogEntry):
     process_name = models.CharField(max_length=200, blank=True, null=True)
     thread = models.DecimalField(max_digits=21, decimal_places=0)
     thread_name = models.CharField(max_length=200, blank=True, null=True)
-    #extra = PickledObjectField(blank=True)
     extra = JSONField(blank=True)
 
     log_aggregate = models.ForeignKey(LogAggregate, blank=True, null=True)

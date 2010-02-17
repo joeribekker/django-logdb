@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+0.9.8
+-----
+- Use int64-friendly field for storing thread ID (vvarp).
+- Fixed a problem with invalid characters passed as logging argument.
+
 0.9.7
 -----
 - Aggregation of logs is now done in a transaction.
