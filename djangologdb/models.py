@@ -159,8 +159,8 @@ class LogManager(models.Manager):
         Creates an error log for a `logging` module `record` instance. This is
         done with as little overhead as possible.
 
-        NOTE: Message arguments are stringified in case odd objects are passed,
-        even though this should be up to the user.
+        NOTE: The message and message arguments are stringified in case odd 
+        objects are passed, even though this should be up to the user.
         """
         # Try to convert all arguments to unicode.
         try:
@@ -180,6 +180,15 @@ class LogManager(models.Manager):
                 except:
                     args.append(u'(django-logdb: Incorrect argument)')
 
+        # Try to convert the message to unicode.
+        try:
+            msg = unicode(record.msg)
+        except UnicodeDecodeError:
+            try:
+                msg = unicode(record.msg, errors='replace')
+            except:
+                msg = u'(django-logdb: Message encoding error)'
+
         log_entry = LogEntry.objects.create(
             args=tuple(args),
             exc_text=record.exc_text,
@@ -188,7 +197,7 @@ class LogManager(models.Manager):
             level=record.levelno,
             line_number=record.lineno,
             module=record.module,
-            msg=record.msg,
+            msg=msg,
             name=record.name,
             path=record.pathname,
             process=record.process,

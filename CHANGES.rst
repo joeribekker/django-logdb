@@ -1,6 +1,12 @@
 CHANGES
 =======
 
+0.9.9
+-----
+- Added templates for LogEntry in manifest file.
+- Fixed a problem that occurred when something other then a string was passed as
+  a message.
+
 0.9.8
 -----
 - Use int64-friendly field for storing thread ID (vvarp).

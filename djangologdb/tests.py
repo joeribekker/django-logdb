@@ -101,7 +101,7 @@ class LogTest(TestCase):
         self.assertEqual(log_entry.level, logging.INFO)
         self.assertEqual(log_entry.extra, extra)
 
-    def test_logging_with_object_arguments(self):
+    def test_logging_with_objects(self):
         class A:
             def __repr__(self):
                 return 'An instance'
@@ -110,8 +110,8 @@ class LogTest(TestCase):
             def __repr__(self):
                 return 'An object'
 
-        msg = '%s, %s and %s are all stringified!'
-        args = (A(), B(), ['a', 'list'])
+        msg = '%s, %s, %s, %s and %s are all stringified!'
+        args = (A(), B(), ['a', 'list'], A, B)
 
         self.assertEqual(LogEntry.objects.count(), 0)
         logger.log(logging.INFO, msg, *args)
@@ -121,6 +121,15 @@ class LogTest(TestCase):
 
         # Check if the log entry matches.
         self.assertEqual(log_entry.get_message(), msg % args)
+
+        # Test if the message itself can also be any of that.
+        log_entry.delete()
+        for msg in args:
+            logger.log(logging.INFO, msg)
+
+            log_entry = LogEntry.objects.get()
+            self.assertEqual(log_entry.get_message(), unicode(msg))
+            log_entry.delete()
 
     def _foo(self, level, name):
         """
