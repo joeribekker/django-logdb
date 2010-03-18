@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import datetime
+import copy
 
 from django.test import TestCase
 from django.core.management import call_command
@@ -8,18 +9,36 @@ from django.core.management import call_command
 from djangologdb.models import LogEntry, LogAggregate
 from djangologdb.handlers import DjangoDatabaseHandler, add_handler
 
-# Set up the root logger.
-logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger()
 
-# Remove default handlers.
-for h in logger.handlers:
-    logger.removeHandler(h)
-
-# Add our handler to the root logger.
-add_handler(logger, DjangoDatabaseHandler())
-
 class LogTest(TestCase):
+
+    def setUp(self):
+        # Store logger settings.
+        self.old_logger_level = logger.level
+        self.old_logger_handlers = copy.copy(logger.handlers)
+
+        # Set up the root logger.
+        logger.setLevel(logging.NOTSET)
+
+        # Remove default handlers. Use the copy to prevent early iteration
+        # termination.
+        for h in self.old_logger_handlers:
+            logger.removeHandler(h)
+
+        # Add our handler to the root logger.
+        add_handler(logger, DjangoDatabaseHandler())
+
+    def tearDown(self):
+        # Remove our own handler.
+        for h in logger.handlers:
+            logger.removeHandler(h)
+
+        # Restore old logger settings.
+        logger.setLevel(self.old_logger_level)
+
+        for h in self.old_logger_handlers:
+            logger.addHandler(h)
 
     def test_handler(self):
         # If the DjangoDatabaseHandler is added to the logging.handlers 

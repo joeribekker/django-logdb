@@ -224,8 +224,8 @@ Thanks
 ------
 To the various people that helped making this project better and better:
 
-Maciek Szczesniak (vvarp)
-Victor van den Elzen
+- Maciek Szczesniak (vvarp)
+- Victor van den Elzen
 
 Thanks to David Cramer for his work on django-db-log 
 (http://github.com/dcramer/django-db-log/) on which this package was based.

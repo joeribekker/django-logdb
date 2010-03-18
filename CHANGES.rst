@@ -1,6 +1,12 @@
 CHANGES
 =======
 
+0.9.10
+------
+- Fixed a problem with django-logdb test suite being used in a project with
+  an existing logging configuration.
+
+
 0.9.9
 -----
 - Added templates for LogEntry in manifest file.
