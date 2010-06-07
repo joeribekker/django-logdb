@@ -112,7 +112,6 @@ add_handler(logger, DjangoDatabaseHandler())
 
 import datetime
 
-#LOGDB_INTERVAL = datetime.timedelta(0, 60 * 60 * 12) # 12 hours
-LOGDB_INTERVAL = datetime.timedelta(2)
-#LOGDB_HISTORY_DAYS = 7
-LOGDB_HISTORY_DAYS = 60
+LOGDB_INTERVAL = datetime.timedelta(0, 60 * 60 * 12) # 12 hours
+LOGDB_HISTORY_DAYS = 7
+

@@ -219,6 +219,15 @@ Why is there 1 query executed for each datapoint?
     Django ORM to group by day, by hour, etc. The solution I used was to 
     filter/limit the results needed to construct 1 datapoint.
 
+When I run my tests, I get see ``ERROR:djangologdb.middleware`` [...]
+    When you run, for example, the testproject, the configuration is set so
+    that any error is also displayed on ``sys.stderr``. As you you'll see, the
+    tests all succeed but the exceptions that are tested are just displayed in
+    the console. This is not an error!
+
+    You can disable this behaviour by disabling logging to the console for your
+    test configuration.
+
 
 Thanks
 ------
