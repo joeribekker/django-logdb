@@ -6,6 +6,7 @@ CHANGES
 - Fixed a problem with django-logdb test suite being used in a project with
   an existing logging configuration.
 - Updated testproject to Django 1.2.
+- Added the license (MIT) file (sorry Jacob).
 
 0.9.9
 -----

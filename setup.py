@@ -19,14 +19,14 @@ setup(
     long_description='\n\n'.join([readme, changes]),
     author='Joeri Bekker',
     author_email='joeri@maykinmedia.nl',
-    license='BSD',
+    license='MIT',
     platforms=['any'],
     url='http://github.com/joeribekker/django-logdb',
     #install_requires=[
     #    'Django>=1.1',
     #],
     include_package_data=True,
-    packages=find_packages(),
+    packages=['djangologdb'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Framework :: Django',
