@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+0.9.11
+------
+- Fixed an issue with applications that add log entries to the tables before 
+  the unit tests are run, which caused unit tests for django-logdb to fail.
+
 0.9.10
 ------
 - Fixed a problem with django-logdb test suite being used in a project with

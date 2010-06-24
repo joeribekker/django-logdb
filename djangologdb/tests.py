@@ -29,6 +29,11 @@ class LogTest(TestCase):
         # Add our handler to the root logger.
         add_handler(logger, DjangoDatabaseHandler())
 
+        # Empty the log table just in case some interfering project, like South
+        # added log entries.
+        LogEntry.objects.all().delete()
+        LogAggregate.objects.all().delete()
+
     def tearDown(self):
         # Remove our own handler.
         for h in logger.handlers:
