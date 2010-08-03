@@ -12,7 +12,7 @@
 	
 	{% block djangologdb-jsinit %}
 	<script type="text/javascript">
-	$(function () {
+	(function($) {
 		var options = {
 			series: {
 				lines: { show: true },
@@ -45,7 +45,7 @@
 			
 			$.plot($("#chart"), data, options);
 		});
-	});
+	})(jQuery.noConflict());
 	</script>
 	{% endblock %}
 {% endblock %}
