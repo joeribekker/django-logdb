@@ -4,6 +4,8 @@ DJANGO-LOGDB
 Django-logdb enables you to log entries to a database, aggregate and act on 
 them with certain rules, and gives you more insight in what's going on.
 
+Django-logdb requires Django 1.1 and higher.
+
 Description
 -----------
 
@@ -227,6 +229,30 @@ When I run my tests, I see ``ERROR:djangologdb.middleware`` [...]
 
     You can disable this behaviour by disabling logging to the console for your
     test configuration (ie. remove the handler).
+
+Why are the templates extending a local version of the Django base templates?
+    This is done for optimal flexibility regarding custom templates. Skins like
+    Grappelli override a lot of templates and sometimes you want to be able to
+    change and use the base template in django-logdb and change some specifics
+    in the django-logdb template itself without copying all the base template
+    stuff.
+
+Test project
+------------
+
+The testproject is a sample installation of django-logdb. It provides a 
+settings file for Django 1.1 and Django 1.2, just to run it.
+
+In the directory below the testproject, create a virtual environment::
+
+    $ virtualenv .
+    $ source bin/activate
+
+Install Django and run the internal server using one of the setting files for
+your Django version.
+
+    $ bin/python bin/pip install django
+    $ bin/python bin/django-admin.py runserver --settings=testproject.settings_django_1_1
 
 
 Thanks
