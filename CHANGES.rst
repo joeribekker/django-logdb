@@ -1,6 +1,12 @@
 CHANGES
 =======
 
+1.0
+---
+- Changed jQuery to use noConflict to be more compatible with other frameworks.
+- Added setting files for Django 1.1 and Django 1.2.
+- Added short howto on getting the testproject up and running.
+
 0.9.11
 ------
 - Fixed an issue with applications that add log entries to the tables before 
