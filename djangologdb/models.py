@@ -1,4 +1,4 @@
-import logging
+﻿import logging
 import datetime
 
 from django.db import models
@@ -242,7 +242,7 @@ class LogEntry(BaseLogEntry):
     fields are represented in this model, except for some time related fields.
     """
     args = TupleField(blank=True, null=True)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
     exc_text = models.TextField(blank=True, null=True)
     process = models.PositiveIntegerField(default=0)
     process_name = models.CharField(max_length=200, blank=True, null=True)
